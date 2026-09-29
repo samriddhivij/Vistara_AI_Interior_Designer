@@ -43,27 +43,6 @@ No prompt box anywhere. The Live session self-initiates `generate_variants`, `pl
 `compile_brief` as function calls mid-conversation; prices quoted in-session are grounded
 `google_search` ESTIMATES with citations, never invented.
 
-## Built during the event vs. starter code we adapted
-
-**Starter code we adapted (disclosed):**
-- `web/` is adapted from Google's official
-  [live-api-web-console](https://github.com/google-gemini/live-api-web-console) starter
-  (Apache-2.0, LICENSE preserved). We swapped the model ID, wired our persona/system instruction,
-  tool declarations, dispatcher, and layout — the streaming scaffolding is theirs.
-
-**Built during the event (today, 2026-07-11 — see commit timestamps):**
-- Everything in `server/` — FastAPI `/variants` + `/brief`, the Omni pre-render script.
-- `web/src/components/rail/` — the progressive variant rail and brief screen.
-- `prompts/` — designer persona, kickoff turn, edit wrappers.
-- `demo/` — fixtures shot at the booth today, clips rendered today from today's corner.
-- All video clips in the demo were generated with Omni Flash **during the event** from the booth
-  corner photographed at 12:00 today; the brief for the demo corner is cached from a grounded
-  call made today. We say so on stage.
-
-<!-- TODO by 4:40: if the T19 3D splat gateway shipped, disclose the open-source pipeline
-     (VGGT/Nerfstudio + gsplat + Spark viewer) and that reconstruction ran during the event
-     on today's booth capture. Delete this comment if splat was cut. -->
-
 ## Run it
 
 ```bash
@@ -86,9 +65,3 @@ npm run dev                        # open the LAN URL on the phone, same hotspot
 python server/scripts/prerender.py server/static/<best_edit>.jpg
 ```
 
-<!-- TODO by 4:40: verify the exact install/run commands above against what actually shipped -->
-
-## Team
-
-- **Anupam Rawat** (Dev A) — Live session spine, persona, tools + brain feed (`web/`)
-- **Abhishek** (Dev B) — generation pipeline, rail, brief pack, demo assets (`server/`, `web/src/components/rail/`, `demo/`)
