@@ -1,0 +1,264 @@
+/* rail.css — Vistara rail + brief screen. Plain CSS, no UI library.
+   Dark-friendly, mobile-first. The rail is a bottom strip ~120px tall. */
+
+/* ---------------- Rail (bottom filmstrip) ---------------- */
+
+.ghar-rail {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 120px;
+  display: flex;
+  gap: 8px;
+  padding: 8px;
+  box-sizing: border-box;
+  overflow-x: auto;
+  overflow-y: hidden;
+  background: rgba(10, 10, 12, 0.85);
+  backdrop-filter: blur(6px);
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  z-index: 40;
+}
+.ghar-rail::-webkit-scrollbar {
+  display: none;
+}
+
+.ghar-rail-tile {
+  flex: 0 0 auto;
+  width: 139px; /* 4:3 inside a 104px-tall tile */
+  height: 104px;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #1c1c22;
+  cursor: pointer;
+}
+
+.ghar-rail-tile img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  animation: ghar-fade-in 0.35s ease-out;
+}
+
+.ghar-rail-tile--skeleton {
+  cursor: default;
+  animation: ghar-pulse 1.2s ease-in-out infinite;
+}
+
+@keyframes ghar-pulse {
+  0%,
+  100% {
+    background: #1c1c22;
+  }
+  50% {
+    background: #2e2e38;
+  }
+}
+
+@keyframes ghar-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* ---------------- Fullscreen enlarge overlay ---------------- */
+
+.ghar-rail-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.92);
+  cursor: pointer;
+}
+
+.ghar-rail-overlay img {
+  max-width: 100vw;
+  max-height: 88vh;
+  object-fit: contain;
+  border-radius: 8px;
+}
+
+.ghar-rail-overlay-hint {
+  margin-top: 12px;
+  font-size: 12px;
+  color: #9a9aa6;
+  font-family: system-ui, sans-serif;
+}
+
+/* ---------------- Brief screen ---------------- */
+
+.ghar-brief {
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  overflow-y: auto;
+  background: #101014;
+  color: #ececf1;
+  font-family: system-ui, -apple-system, sans-serif;
+  padding: 16px 16px 40px;
+  box-sizing: border-box;
+}
+
+.ghar-brief-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.ghar-brief-header h2 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+}
+.ghar-brief-close {
+  background: none;
+  border: none;
+  color: #9a9aa6;
+  font-size: 30px;
+  line-height: 1;
+  padding: 4px 10px;
+  cursor: pointer;
+}
+
+.ghar-brief-loading {
+  margin-top: 40px;
+  text-align: center;
+  color: #9a9aa6;
+}
+
+.ghar-brief-body h3 {
+  margin: 20px 0 8px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #c9c9d4;
+}
+
+.ghar-est-tag {
+  display: inline-block;
+  margin-left: 6px;
+  padding: 1px 6px;
+  font-size: 10px;
+  font-weight: 500;
+  border-radius: 8px;
+  background: #2c2c36;
+  color: #b9b9c6;
+  vertical-align: middle;
+}
+
+.ghar-brief-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+.ghar-brief-table td {
+  padding: 8px 4px;
+  border-bottom: 1px solid #24242c;
+  vertical-align: top;
+}
+.ghar-brief-item {
+  padding-right: 8px;
+}
+.ghar-brief-amount {
+  text-align: right;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+.ghar-vendor-link {
+  margin-left: 8px;
+  font-size: 12px;
+  color: #7db2ff;
+  text-decoration: none;
+}
+.ghar-vendor-link:hover {
+  text-decoration: underline;
+}
+.ghar-brief-total td {
+  border-bottom: none;
+  border-top: 2px solid #3a3a46;
+  font-weight: 700;
+}
+
+.ghar-legal-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-size: 14px;
+}
+.ghar-legal-list li {
+  display: flex;
+  gap: 10px;
+  padding: 8px 0;
+  border-bottom: 1px solid #24242c;
+}
+.ghar-legal-list li:last-child {
+  border-bottom: none;
+}
+.ghar-legal-mark {
+  flex: 0 0 auto;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 700;
+}
+.ghar-legal-list li.is-required .ghar-legal-mark {
+  background: #23402a;
+  color: #8fe3a1;
+}
+.ghar-legal-list li.is-optional .ghar-legal-mark {
+  background: #2c2c36;
+  color: #8a8a96;
+}
+.ghar-legal-list strong {
+  display: block;
+  font-weight: 600;
+}
+.ghar-legal-list em {
+  display: block;
+  font-style: normal;
+  font-size: 12px;
+  color: #9a9aa6;
+  margin-top: 2px;
+}
+
+.ghar-brief-send {
+  display: block;
+  margin-top: 24px;
+  padding: 14px;
+  text-align: center;
+  border-radius: 12px;
+  background: #3b6ef5;
+  color: #fff;
+  font-weight: 600;
+  font-size: 15px;
+  text-decoration: none;
+}
+.ghar-brief-send:active {
+  background: #2f58c7;
+}
+
+/* Slightly larger tiles on wide screens (laptop rehearsals). */
+@media (min-width: 700px) {
+  .ghar-rail {
+    height: 140px;
+  }
+  .ghar-rail-tile {
+    width: 165px;
+    height: 124px;
+  }
+  .ghar-brief {
+    padding: 24px 10vw 60px;
+  }
+}

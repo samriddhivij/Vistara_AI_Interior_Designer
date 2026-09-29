@@ -1,0 +1,133 @@
+<!doctype html>
+<!-- Vistara T19 splat viewer — single file, no build step.
+     Usage: viewer/index.html?ply=/scenes/<job_id>/scene.ply  (or any .ply/.spz URL)
+     Spark import pattern verified against sparkjsdev/spark README 2026-07-11. -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+<title>Vistara — walk this room in 3D</title>
+<style>
+  html, body { margin: 0; height: 100%; background: #0b0d10; overflow: hidden; }
+  canvas { display: block; touch-action: none; }
+  #hint {
+    position: fixed; left: 12px; bottom: 12px; z-index: 10;
+    color: #c9d1d9; font: 13px/1.5 system-ui, sans-serif;
+    background: rgba(13,17,23,.75); padding: 8px 12px; border-radius: 8px;
+    pointer-events: none;
+  }
+  #walkBtn {
+    position: fixed; right: 12px; bottom: 12px; z-index: 10;
+    color: #e6edf3; font: 14px system-ui, sans-serif;
+    background: #1f6feb; border: 0; border-radius: 8px; padding: 10px 16px;
+    cursor: pointer;
+  }
+  #msg {
+    position: fixed; inset: 0; display: flex; align-items: center; justify-content: center;
+    color: #8b949e; font: 15px system-ui, sans-serif; z-index: 5; pointer-events: none;
+  }
+</style>
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/",
+    "@sparkjsdev/spark": "https://sparkjs.dev/releases/spark/2.1.0/spark.module.js"
+  }
+}
+</script>
+</head>
+<body>
+<div id="msg">loading splat…</div>
+<div id="hint">drag to orbit · pinch/scroll to zoom · click <b>Walk</b> for WASD</div>
+<button id="walkBtn">Walk</button>
+<script type="module">
+import * as THREE from "three";
+import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+import { PointerLockControls } from "three/addons/controls/PointerLockControls.js";
+import { SparkRenderer, SplatMesh } from "@sparkjsdev/spark";
+
+const plyUrl = new URLSearchParams(location.search).get("ply");
+const msg = document.getElementById("msg");
+if (!plyUrl) msg.textContent = "add ?ply=<url-to-scene.ply> to the address";
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x0b0d10);
+const camera = new THREE.PerspectiveCamera(65, innerWidth / innerHeight, 0.01, 1000);
+camera.position.set(0, 0.4, 2.5);
+
+const renderer = new THREE.WebGLRenderer({ antialias: false });
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.setSize(innerWidth, innerHeight);
+document.body.appendChild(renderer.domElement);
+
+const spark = new SparkRenderer({ renderer });
+scene.add(spark);
+
+if (plyUrl) {
+  const splat = new SplatMesh({ url: plyUrl });
+  // COLMAP/nerfstudio exports are Y-down; flip so the room is upright.
+  // If the room appears inverted on the GPU-box test, remove this line.
+  splat.quaternion.set(1, 0, 0, 0);
+  scene.add(splat);
+  splat.initialized.then(() => { msg.style.display = "none"; })
+    .catch(err => { msg.textContent = "failed to load splat: " + err; });
+  // Fallback if this Spark version lacks the .initialized promise:
+  setTimeout(() => { if (msg.style.display !== "none") msg.style.display = "none"; }, 8000);
+}
+
+// --- orbit mode (default; works with mouse and touch) ---
+const orbit = new OrbitControls(camera, renderer.domElement);
+orbit.target.set(0, 0, 0);
+orbit.enableDamping = true;
+orbit.dampingFactor = 0.08;
+
+// --- walk mode (PointerLock + WASD) ---
+const walk = new PointerLockControls(camera, renderer.domElement);
+const keys = {};
+addEventListener("keydown", e => keys[e.code] = true);
+addEventListener("keyup",   e => keys[e.code] = false);
+
+const walkBtn = document.getElementById("walkBtn");
+const hint = document.getElementById("hint");
+walkBtn.addEventListener("click", () => walk.lock());
+walk.addEventListener("lock", () => {
+  orbit.enabled = false;
+  walkBtn.textContent = "Walking (Esc to exit)";
+  hint.innerHTML = "WASD to move · QE up/down · mouse to look · <b>Esc</b> to orbit";
+});
+walk.addEventListener("unlock", () => {
+  orbit.enabled = true;
+  walkBtn.textContent = "Walk";
+  hint.innerHTML = "drag to orbit · pinch/scroll to zoom · click <b>Walk</b> for WASD";
+});
+
+const clock = new THREE.Clock();
+const dir = new THREE.Vector3();
+function moveWASD(dt) {
+  const speed = (keys["ShiftLeft"] ? 3.0 : 1.4) * dt;
+  dir.set(
+    (keys["KeyD"] ? 1 : 0) - (keys["KeyA"] ? 1 : 0),
+    0,
+    (keys["KeyW"] ? 1 : 0) - (keys["KeyS"] ? 1 : 0),
+  );
+  if (dir.x) walk.moveRight(dir.x * speed);
+  if (dir.z) walk.moveForward(dir.z * speed);
+  if (keys["KeyQ"]) camera.position.y -= speed;
+  if (keys["KeyE"]) camera.position.y += speed;
+}
+
+renderer.setAnimationLoop(() => {
+  const dt = Math.min(clock.getDelta(), 0.05);
+  if (walk.isLocked) moveWASD(dt); else orbit.update();
+  renderer.render(scene, camera);
+});
+
+addEventListener("resize", () => {
+  camera.aspect = innerWidth / innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(innerWidth, innerHeight);
+});
+</script>
+</body>
+</html>

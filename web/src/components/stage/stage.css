@@ -1,0 +1,299 @@
+/* stage.css — central screen of the Vistara app: the design journey. */
+
+.ghar-stage {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #0b0d0e;
+  border-radius: 18px;
+  overflow: hidden;
+}
+
+.ghar-stage-video {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  background: #000;
+  display: block;
+}
+
+.ghar-stage-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+.ghar-stage-chip {
+  position: absolute;
+  bottom: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  max-width: 85%;
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: rgba(10, 10, 10, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #e1e2e3;
+  font-size: 12px;
+  font-family: "Space Mono", monospace;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  pointer-events: none;
+}
+
+/* Room-name chip pinned top-left of a playing tour video */
+.ghar-stage-room-chip {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: rgba(10, 10, 10, 0.75);
+  border: 1px solid rgba(168, 218, 181, 0.55);
+  color: #a8dab5;
+  font-size: 13px;
+  font-weight: 700;
+  font-family: "Space Mono", monospace;
+  text-transform: capitalize;
+  max-width: 60%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.ghar-stage-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: rgba(17, 17, 17, 0.85);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 6px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: "Space Mono", monospace;
+  font-size: 12px;
+  z-index: 2;
+}
+
+.ghar-stage-close:hover {
+  background: rgba(64, 69, 71, 0.9);
+}
+
+/* ================================================================
+   Concepts batch — "Now designing: {area}" header + 2x2 grid
+   ================================================================ */
+
+.ghar-stage--batch {
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  padding: 14px 16px 16px;
+  box-sizing: border-box;
+  background: radial-gradient(ellipse at 50% 0%, #131b1a 0%, #0b0d0e 65%);
+}
+
+.ghar-stage-batch-header {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  padding: 2px 4px 12px;
+  font-family: "Space Mono", monospace;
+  min-width: 0;
+}
+
+.ghar-stage-batch-kicker {
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #888d8f;
+  white-space: nowrap;
+}
+
+.ghar-stage-batch-area {
+  font-size: clamp(17px, 2.6vw, 25px);
+  font-weight: 700;
+  color: #e1e2e3;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ghar-stage-batch-status {
+  margin-left: auto;
+  font-size: 11px;
+  color: #a8dab5;
+  white-space: nowrap;
+  animation: ghar-stage-blink 1.6s ease-in-out infinite;
+}
+
+.ghar-stage-grid {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 12px;
+}
+
+.ghar-stage-tile {
+  position: relative;
+  min-height: 0;
+  min-width: 0;
+  border-radius: 14px;
+  overflow: hidden;
+  background: #141719;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  transition: transform 0.25s ease, box-shadow 0.25s ease, opacity 0.25s ease,
+    border-color 0.25s ease, filter 0.25s ease;
+}
+
+.ghar-stage-tile img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  animation: ghar-tile-fadein 0.5s ease both;
+}
+
+/* Pending: pulsing skeleton */
+.ghar-stage-tile--skeleton {
+  background: linear-gradient(135deg, #16191b 0%, #212628 50%, #16191b 100%);
+  animation: ghar-tile-pulse 1.5s ease-in-out infinite;
+}
+
+/* Failed: keep the grid cell but show nothing */
+.ghar-stage-tile--failed {
+  visibility: hidden;
+}
+
+/* Done: clickable */
+.ghar-stage-tile--done {
+  cursor: pointer;
+}
+
+.ghar-stage-tile--done:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 26px rgba(0, 0, 0, 0.55);
+  border-color: rgba(255, 255, 255, 0.22);
+}
+
+/* Picked: ✓ ring + brief zoom */
+.ghar-stage-tile--picked {
+  border-color: #a8dab5;
+  box-shadow: 0 0 0 3px rgba(168, 218, 181, 0.85), 0 10px 30px rgba(0, 0, 0, 0.6);
+  animation: ghar-tile-zoom 0.6s ease both;
+  z-index: 2;
+}
+
+.ghar-stage-tile--dimmed {
+  opacity: 0.35;
+  filter: saturate(0.6);
+  pointer-events: none;
+}
+
+.ghar-stage-tile-check {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: #a8dab5;
+  color: #06230f;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: 700;
+  font-family: "Space Mono", monospace;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+  animation: ghar-tile-fadein 0.2s ease both;
+}
+
+@keyframes ghar-tile-pulse {
+  0%,
+  100% {
+    opacity: 0.45;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes ghar-tile-fadein {
+  from {
+    opacity: 0;
+    transform: scale(1.03);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes ghar-tile-zoom {
+  0% {
+    transform: scale(1);
+  }
+  45% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1.02);
+  }
+}
+
+@keyframes ghar-stage-blink {
+  0%,
+  100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* ================================================================
+   Idle invite
+   ================================================================ */
+
+.ghar-stage--idle {
+  background: radial-gradient(
+    ellipse at 50% 35%,
+    #16211f 0%,
+    #0b0d0e 70%
+  );
+}
+
+.ghar-stage-idle-inner {
+  text-align: center;
+  padding: 24px;
+  max-width: 560px;
+}
+
+.ghar-stage-idle-title {
+  font-family: "Space Mono", monospace;
+  font-size: clamp(20px, 4vw, 30px);
+  font-weight: 700;
+  color: #e1e2e3;
+  line-height: 1.35;
+  margin-bottom: 14px;
+}
+
+.ghar-stage-idle-sub {
+  font-family: "Space Mono", monospace;
+  font-size: clamp(13px, 2.2vw, 15px);
+  color: #888d8f;
+  line-height: 1.5;
+}

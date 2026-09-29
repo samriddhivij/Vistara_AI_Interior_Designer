@@ -1,0 +1,6 @@
+# Vistara server deps — minimal, no pins beyond what the docs require.
+google-genai>=2.3.0   # Interactions API (NB2 edits + Omni Flash) needs >=2.3.0 per docs
+python-dotenv
+fastapi
+uvicorn
+httpx

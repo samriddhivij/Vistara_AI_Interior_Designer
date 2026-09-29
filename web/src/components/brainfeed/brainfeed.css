@@ -1,0 +1,176 @@
+/* BrainFeed CSS styles with "ghar-bf-" prefix to avoid collisions */
+
+.ghar-bf-panel {
+  position: fixed;
+  right: 0;
+  top: 0;
+  height: 100vh;
+  width: 280px;
+  background: rgba(18, 18, 18, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-left: 1px solid rgba(255, 255, 255, 0.08);
+  color: #e0e0e0;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 11px;
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-sizing: border-box;
+}
+
+.ghar-bf-panel--collapsed {
+  transform: translateX(100%);
+}
+
+.ghar-bf-panel--open {
+  transform: translateX(0);
+}
+
+.ghar-bf-toggle {
+  position: absolute;
+  left: -32px;
+  top: 16px;
+  width: 32px;
+  height: 32px;
+  background: rgba(18, 18, 18, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-right: none;
+  border-radius: 4px 0 0 4px;
+  color: #888;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.2s, color 0.2s;
+  user-select: none;
+  padding: 0;
+  line-height: 1;
+}
+
+.ghar-bf-toggle:hover {
+  background: rgba(30, 30, 30, 0.95);
+  color: #fff;
+}
+
+.ghar-bf-header {
+  padding: 14px 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.ghar-bf-header-title {
+  text-transform: uppercase;
+  font-weight: bold;
+  letter-spacing: 1.5px;
+  color: #aaa;
+  font-size: 12px;
+}
+
+.ghar-bf-demo-btn {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #bbb;
+  border-radius: 3px;
+  padding: 3px 8px;
+  font-family: inherit;
+  font-size: 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.ghar-bf-demo-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.3);
+  color: #fff;
+}
+
+.ghar-bf-events-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  box-sizing: border-box;
+}
+
+/* Custom scrollbar */
+.ghar-bf-events-list::-webkit-scrollbar {
+  width: 4px;
+}
+
+.ghar-bf-events-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.ghar-bf-events-list::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 2px;
+}
+
+.ghar-bf-empty {
+  color: #666;
+  text-align: center;
+  padding-top: 40px;
+  font-style: italic;
+  letter-spacing: 0.5px;
+}
+
+.ghar-bf-event-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-bottom: 10px;
+  border-bottom: 1px dashed rgba(255, 255, 255, 0.06);
+}
+
+.ghar-bf-event-meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 9px;
+  color: #666;
+}
+
+.ghar-bf-event-time {
+  color: #00ffcc;
+  opacity: 0.8;
+  font-weight: bold;
+}
+
+.ghar-bf-event-kind {
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.ghar-bf-event-content {
+  line-height: 1.4;
+  word-break: break-all;
+  white-space: pre-wrap;
+}
+
+.ghar-bf-event-prefix {
+  display: inline-block;
+  margin-right: 4px;
+}
+
+/* Event Kind specific colors */
+.ghar-bf-event-item--observation .ghar-bf-event-content {
+  color: #e0e0e0;
+}
+
+.ghar-bf-event-item--tool_call .ghar-bf-event-content {
+  color: #ffdd67;
+}
+
+.ghar-bf-event-item--images .ghar-bf-event-content {
+  color: #ff9cfc;
+}
+
+.ghar-bf-event-item--note .ghar-bf-event-content {
+  color: #a2d2ff;
+}

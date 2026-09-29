@@ -1,0 +1,20 @@
+# local files — never commit
+session.txt
+track5.txt
+.DS_Store
+
+# secrets
+.env
+*.env.local
+
+# deps / build
+node_modules/
+dist/
+__pycache__/
+*.pyc
+.venv/
+web/build/
+server/static/
+
+# large local demo assets get committed selectively, not blindly
+demo/fallback.mp4
